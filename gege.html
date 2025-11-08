@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ederlyn's Bakery POS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="loginPage">
+        <div class="container">
+            <div class="login-section">
+                <div class="logo">
+                    <img src="images/logo.png.png" alt="Ederlyn's Bakery Logo">
+                </div>
+                <h2>WELCOME OWNER!</h2>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input type="text" id="username" placeholder="Username" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+                <div id="messageBox"></div>
+            </div>
+            <div class="image-section">
+                <img src="images/bakery.jpg.jfif" alt="Bakery Display">
+            </div>
+        </div>
+    </div>
+    <div id="appContent">
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <ul>
+                <li class="active" id="dashboardNav"><i>📊</i> Dashboard</li>
+                <li id="orderNav"><i>🛒</i> Order</li>
+                <li id="inventoryNav"><i>📦</i> <a href="inventory.php">Inventory</a></li>
+                <li id="logoutNav"><i>🚪</i> Logout</li>
+            </ul>
+        </div>
+        <div id="dashboardContent" class="dashboard">
+            <section class="stats">
+                <div class="stat-box">
+                    <h3>Total Sale Amount</h3>
+                    <p id="totalSaleAmount">₱0.00</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Total Sales</h3>
+                    <p id="totalSaleCount">0</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Total Products</h3>
+                    <p id="totalProducts">7</p>
+                    <small id="lowStockCount">Low Stock: 0</small>
+                </div>
+            </section>
+            <h3>Recent Sales</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Sales By</th>
+                    </tr>
+                </thead>
+                <tbody id="salesTableBody">
+                    <tr><td colspan="4">No sales data available</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="orderContent" class="main-content" style="display: none;">
+            <div class="header">
+                <div class="brand">Ederlyn's Bakery POS</div>
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search Products...">
+                </div>
+                <div class="admin-btn" id="adminBtn">
+                    <span>Owner</span>
+                    <div class="admin-icon">👤</div>
+                </div>
+            </div>
+            <div class="content-area">
+                <div class="menu-area">
+                    <div class="menu-header">MENU</div>
+                    <div class="menu-grid">
+                        <div class="product-card" data-name="Monay" data-price="5.00" data-image="https://i.pinimg.com/originals/2e/a3/65/2ea365e4f24bbfbf5650751edbca7afa.jpg">
+                            <img src="https://i.pinimg.com/originals/2e/a3/65/2ea365e4f24bbfbf5650751edbca7afa.jpg" alt="Monay" class="product-image">
+                            <div class="product-name">Monay</div>
+                            <div class="product-price">₱5.00</div>
+                        </div>
+                        <div class="product-card" data-name="Hopia" data-price="10.00" data-image="https://i.pinimg.com/736x/77/84/2b/77842b10b953b0ef18bcd2a6c111e6b6.jpg">
+                            <img src="https://i.pinimg.com/736x/77/84/2b/77842b10b953b0ef18bcd2a6c111e6b6.jpg" alt="Hopia" class="product-image">
+                            <div class="product-name">Hopia</div>
+                            <div class="product-price">₱10.00</div>
+                        </div>
+                        <div class="product-card" data-name="Ensaymada" data-price="25.00" data-image="https://i.pinimg.com/736x/43/45/b5/4345b5901c0c144a9a2a6889ba0669b7.jpg">
+                            <img src="https://i.pinimg.com/736x/43/45/b5/4345b5901c0c144a9a2a6889ba0669b7.jpg" alt="Ensaymada" class="product-image">
+                            <div class="product-name">Ensaymada</div>
+                            <div class="product-price">₱25.00</div>
+                        </div>
+                        <div class="product-card" data-name="Pan de Coco" data-price="8.00" data-image="https://i.pinimg.com/736x/55/b1/1c/55b11c6d655ce05a41031b2b28c22b9c.jpg">
+                            <img src="https://i.pinimg.com/736x/55/b1/1c/55b11c6d655ce05a41031b2b28c22b9c.jpg" alt="Pan de Coco" class="product-image">
+                            <div class="product-name">Pan de Coco</div>
+                            <div class="product-price">₱8.00</div>
+                        </div>
+                        <div class="product-card" data-name="Torta" data-price="15.00" data-image="https://i.pinimg.com/736x/d2/34/0f/d2340ff13ae772b2568b3d64b65551cd.jpg">
+                            <img src="https://i.pinimg.com/736x/d2/34/0f/d2340ff13ae772b2568b3d64b65551cd.jpg" alt="Torta" class="product-image">
+                            <div class="product-name">Torta</div>
+                            <div class="product-price">₱15.00</div>
+                        </div>
+                        <div class="product-card" data-name="Slice Bread" data-price="20.00" data-image="https://i.pinimg.com/736x/5f/0b/a5/5f0ba535b89b456286708681653b6320.jpg">
+                            <img src="https://i.pinimg.com/736x/5f/0b/a5/5f0ba535b89b456286708681653b6320.jpg" alt="Slice Bread" class="product-image">
+                            <div class="product-name">Slice Bread</div>
+                            <div class="product-price">₱20.00</div>
+                        </div>
+                        <div class="product-card" data-name="Spanish Bread" data-price="7.00" data-image="https://i.pinimg.com/736x/44/5d/b8/445db8d39b861b58520850b78b9b5266.jpg">
+                            <img src="https://i.pinimg.com/736x/44/5d/b8/445db8d39b861b58520850b78b9b5266.jpg" alt="Spanish Bread" class="product-image">
+                            <div class="product-name">Spanish Bread</div>
+                            <div class="product-price">₱7.00</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-area">
+                    <div class="order-header">
+                        <div class="order-label">Customer ID:</div>
+                        <div class="order-value" id="customerIdDisplay">Customer #1</div>
+                    </div>
+                    <div class="order-items" id="orderItems">
+                        <div id="no-items-message">No items in your order yet</div>
+                    </div>
+                    <div class="order-summary">
+                        <div class="amount-row">
+                            <span class="label">Payable Amount:</span>
+                            <span id="payableAmount">₱0.00</span>
+                        </div>
+                        <div class="amount-row">
+                            <span class="label">Payment:</span>
+                            <input type="number" id="paymentInput" placeholder="Enter Amount">
+                        </div>
+                        <div class="amount-row">
+                            <span class="label">Change:</span>
+                            <span id="changeAmount">₱0.00</span>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="order-btn btn-delete" id="cancelOrderBtn">Cancel Order</button>
+                        <button class="order-btn btn-save" id="saveOrderBtn">Save Order</button>
+                        <button class="order-btn btn-place-order" id="placeOrderBtn">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="inventoryContent" class="inventory-container" style="display: none;">
+            <h2 class="inventory-header">Inventory Management</h2>
+            <div class="inventory-actions">
+                <button class="inventory-button" id="addItemBtn">Add Item</button>
+            </div>
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTableBody">
+                    <tr>
+                        <td>Hopia</td>
+                        <td>20pcs</td>
+                        <td class="status in-stock">In Stock</td>
+                        <td>
+                            <button class="update-btn">Update</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Monay</td>
+                        <td>15pcs</td>
+                        <td class="status in-stock">In Stock</td>
+                        <td>
+                            <button class="update-btn">Update</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ensaymada</td>
+                        <td>8pcs</td>
+                        <td class="status low-stock">Low Stock</td>
+                        <td>
+                            <button class="update-btn">Update</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pan de Coco</td>
+                        <td>0pcs</td>
+                        <td class="status out-of-stock">Out of Stock</td>
+                        <td>
+                            <button class="update-btn">Update</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Torta</td>
+                        <td>0pcs</td>
+                        <td class="status out-of-stock">Out of Stock</td>
+                        <td>
+                            <button class="update-btn">Update</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Slice Bread</td>
+                        <td>0pcs</td>
+                        <td class="status out-of-stock">Out of Stock</td>
+                        <td>
+                            <button class="update-btn">Update</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>Spanish Bread</td>
+                        <td>0pcs</td>
+                        <td class="status out-of-stock">Out of Stock</td>
+                        <td>
+                            <button class="update-btn">Update</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="addItemModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3>Add New Product</h3>
+                    <form id="addItemForm">
+                        <div class="form-group">
+                            <label for="itemName">Product Name:</label>
+                            <input type="text" id="itemName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemStock">Stock:</label>
+                            <input type="text" id="itemStock" required placeholder="e.g., 50pcs">
+                        </div>
+                         <div class="form-group">
+                            <label for="itemPrice">Price:</label>
+                            <input type="number" id="itemPrice" required placeholder="e.g., 50.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemImage">Upload Image:</label>
+                            <input type="file" id="itemImage" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="submit-btn">Add Product</button>
+                    </form>
+                </div>
+            </div>
+            <div id="updateItemModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3>Update Product</h3>
+                    <form id="updateItemForm">
+                        <input type="hidden" id="updateItemIndex">
+                        <div class="form-group">
+                            <label for="updateItemName">Product Name:</label>
+                            <input type="text" id="updateItemName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateItemStock">Stock:</label>
+                            <input type="text" id="updateItemStock" required placeholder="e.g., 20pcs">
+                        </div>
+                        <button type="submit" class="submit-btn">Update Product</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="alertBox" class="alert-box"></div>
+
+    <script src="haystt.js"></script>
+
+</body>
+</html>

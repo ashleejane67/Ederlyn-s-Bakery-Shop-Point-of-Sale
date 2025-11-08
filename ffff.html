@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ederlyn's Bakery POS</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+}
+body {
+display: flex;
+height: 100vh;
+background-color: #e6f2ff;
+}
+.sidebar {
+width: 250px;
+background: #4a90e2;
+color: white;
+padding: 20px;
+display: flex;
+flex-direction: column;
+}
+.sidebar h2 {
+font-size: 22px;
+margin-bottom: 20px;
+font-weight: bold;
+}
+.sidebar ul {
+list-style: none;
+}
+.sidebar ul li {
+padding: 15px;
+cursor: pointer;
+border-radius: 5px;
+margin-bottom: 5px;
+display: flex;
+align-items: center;
+}
+.sidebar ul li i {
+margin-right: 10px;
+font-size: 18px;
+width: 24px;
+text-align: center;
+}
+.sidebar ul li:hover, .sidebar ul li.active {
+background: #2c6db5;
+}
+.main-content {
+flex: 1;
+display: flex;
+flex-direction: column;
+}
+.header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px 20px;
+background-color: #e6f2ff;
+border-bottom: 1px solid #ccc;
+}
+.brand {
+color: #990000;
+font-size: 20px;
+font-weight: bold;
+}
+.search-container {
+flex: 0 1 400px;
+}
+.search-input {
+width: 100%;
+padding: 8px 15px;
+border: none;
+border-radius: 20px;
+background-color: #c79440;
+color: white;
+}
+.search-input::placeholder {
+color: rgba(255, 255, 255, 0.8);
+}
+.admin-btn {
+display: flex;
+align-items: center;
+gap: 5px;
+cursor: pointer;
+}
+.admin-icon {
+background-color: #333;
+color: white;
+width: 30px;
+height: 30px;
+border-radius: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.content-area {
+display: flex;
+flex: 1;
+overflow: hidden;
+}
+.menu-area {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+}
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+}
+.menu-header {
+font-size: 50px;
+font-weight: bold;
+margin-bottom: 15px;
+}
+.product-card {
+background-color: #c79440;
+border-radius: 5px;
+overflow: hidden;
+text-align: center;
+cursor: pointer;
+height: 140px;
+}
+.product-card.add-stock {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+color: #444;
+}
+.product-image {
+width: 100%;
+height: 90px;
+object-fit: cover;
+}
+.product-name {
+font-size: 14px;
+color: white;
+padding: 4px 0;
+}
+.product-price {
+font-size: 12px;
+color: white;
+}
+.order-area {
+flex: 2;
+padding: 15px;
+display: flex;
+flex-direction: column;
+background-color: white;
+}
+.order-header {
+display: flex;
+justify-content: space-between;
+margin-bottom: 15px;
+}
+.order-label {
+font-weight: bold;
+width: 100px;
+}
+.order-value {
+border: 1px solid #ccc;
+padding: 5px 10px;
+flex: 1;
+text-align: center;
+}
+.order-items {
+flex: 1;
+overflow-y: auto;
+}
+.order-item {
+display: flex;
+align-items: center;
+border-bottom: 1px solid #eee;
+padding: 10px 0;
+}
+.order-item-image {
+width: 60px;
+height: 60px;
+border-radius: 5px;
+object-fit: cover;
+margin-right: 15px;
+}
+.order-item-details {
+flex: 1;
+}
+.order-item-name {
+font-weight: bold;
+}
+.order-item-price {
+color: #666;
+font-size: 14px;
+}
+.order-item-quantity {
+display: flex;
+align-items: center;
+margin-right: 10px;
+}
+.quantity-btn {
+width: 25px;
+height: 25px;
+border: 1px solid #ccc;
+background-color: #f5f5f5;
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+}
+.customer-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    outline: none;
+    font-size: inherit;
+}
+.quantity-value {
+padding: 0 10px;
+}
+.remove-btn {
+padding: 5px 15px;
+background-color: #ff6b6b;
+color: white;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+}
+.order-total {
+display: flex;
+justify-content: space-between;
+padding: 15px 0;
+font-size: 18px;
+font-weight: bold;
+}
+.order-actions {
+display: flex;
+gap: 10px;
+margin-bottom: 15px;
+}
+.order-btn {
+flex: 1;
+padding: 10px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+}
+.btn-delete {
+background-color: #ccc;
+}
+.btn-save {
+background-color: #ccc;
+}
+.btn-place-order {
+width: 100%;
+padding: 15px;
+background-color: #c79440;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+}
+.add-icon {
+font-size: 24px;
+margin-bottom: 5px;
+}
+#no-items-message {
+text-align: center;
+padding: 20px;
+color: #666;
+}
+.container {
+    display: flex;
+    width: 900px;
+    height: 500px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+.login-section {
+    width: 50%;
+    background: #b4d4ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.logo img {
+    width: 150px;
+    margin-bottom: 10px;
+}
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+.input-group {
+    width: 100%;
+    margin-bottom: 15px;
+}
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+button {
+    width: 100%;
+    padding: 10px;
+    background: #3498db;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+button:hover {
+    background: #2980b9;
+}
+.image-section {
+    width: 50%;
+    background: #ddd;
+}
+.image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+#messageBox {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.dashboard {
+flex-grow: 1;
+padding: 20px;
+}
+.stats {
+display: flex;
+justify-content: space-between;
+margin-bottom: 20px;
+}
+.stat-box {
+width: 48%;
+padding: 20px;
+background: #d9eaff;
+border-radius: 8px;
+text-align: center;
+}
+table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 10px;
+}
+th, td {
+padding: 12px;
+text-align: center;
+border-bottom: 1px solid #ddd;
+}
+th {
+background: #4a90e2;
+color: white;
+}
+tr:nth-child(even) {
+background: #f9f9f9;
+}
+#loginPage {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+width: 100vw;
+position: fixed;
+top: 0;
+left: 0;
+z-index: 1000;
+background-color: #eaeff5;
+}
+.order-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .amount-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .label {
+    font-weight: bold;
+  }
+  #paymentInput {
+    text-align: right;
+    width: 120px;
+  }
+#appContent {
+display: none;
+width: 100%;
+height: 100vh;
+}
+@media (max-width: 768px) {
+.content-area {
+flex-direction: column;
+}
+.menu-grid {
+grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+}
+.container {
+    width: 95%;
+    flex-direction: column;
+    height: auto;
+}
+.login-section, .image-section {
+    width: 100%;
+}
+}
+.inventory-container {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+}
+.inventory-header {
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #333;
+}
+.inventory-actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.inventory-button {
+    padding: 10px 15px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.inventory-button:hover {
+    background-color: #2c6db5;
+}
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #d9eaff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.inventory-table th {
+    background-color: #4a90e2;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+.inventory-table td {
+    padding: 15px;
+    border-bottom: 1px solid #b4d4ff;
+}
+.inventory-table tr:nth-child(even) {
+    background-color: #cfe5ff;
+}
+.update-btn {
+    background-color: #ffeb3b;
+    color: #333;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.status {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: inline-block;
+}
+.in-stock {
+    background-color: #00e676;
+    color: white;
+}
+.low-stock {
+    background-color: #ff9800;
+    color: white;
+}
+.out-of-stock {
+    background-color: #ff5252;
+    color: white;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    width: 50%;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+.close-modal {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.submit-btn {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+@media (max-width: 768px) {
+    .inventory-actions {
+        flex-direction: column;
+    }
+    .modal-content {
+        width: 90%;
+    }
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  .modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    max-width: 500px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+  }
+  .form-group {
+    margin-bottom: 15px;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  .submit-btn {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .submit-btn:hover {
+    background-color: #2c6db5;
+  }
+  .delete-btn {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 14px;
+  }
+  .delete-btn:hover {
+    background-color: #e55353;
+  }
+  .update-btn {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .update-btn:hover {
+    background-color: #0b7dda;
+  }
+  @media (max-width: 768px) {
+    .modal-content {
+      width: 90%;
+      margin: 20% auto;
+    }
+    .inventory-table th:nth-child(3),
+    .inventory-table td:nth-child(3) {
+      display: none;
+    }
+  }
+  .alert-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    z-index: 2000;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: none;
+  }
+  .alert-warning {
+    background-color: #ff9800;
+  }
+  .alert-danger {
+    background-color: #ff5252;
+  }
+</style>
+</head>
+<body>
+<div id="loginPage">
+    <div class="container">
+        <div class="login-section">
+            <div class="logo">
+                <img src="C:\Users\ashle\OneDrive\Desktop\project-folder\images\logo.png.png" alt="Ederlyn's Bakery Logo">
+            </div>
+            <h2>WELCOME OWNER!</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <div id="messageBox"></div>
+        </div>
+        <div class="image-section">
+            <img src="C:\Users\ashle\OneDrive\Desktop\project-folder\images\bakery.jpg.jfif" alt="Bakery Display">
+        </div>
+    </div>
+</div>
+<div id="appContent">
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+        <ul>
+            <li class="active" id="dashboardNav"><i>📊</i> Dashboard</li>
+            <li id="orderNav"><i>🛒</i> Order</li>
+            <li id="inventoryNav"><i>📦</i> Inventory</li>
+            <li id="logoutNav"><i>🚪</i> Logout</li>
+        </ul>
+    </div>
+    <div id="dashboardContent" class="dashboard">
+        <section class="stats">
+            <div class="stat-box">
+                <h3>Total Sale Amount</h3>
+                <p id="totalSaleAmount">₱0.00</p>
+            </div>
+            <div class="stat-box">
+                <h3>Total Sales</h3>
+                <p id="totalSaleCount">0</p>
+            </div>
+            <div class="stat-box">
+                <h3>Total Products</h3>
+                <p id="totalProducts">7</p>
+                <small id="lowStockCount">Low Stock: 0</small>
+            </div>
+        </section>
+        <h3>Recent Sales</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Sales By</th>
+                </tr>
+            </thead>
+            <tbody id="salesTableBody">
+                <tr><td colspan="4">No sales data available</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="orderContent" class="main-content" style="display: none;">
+        <div class="header">
+            <div class="brand">Ederlyn's Bakery POS</div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search Products...">
+            </div>
+            <div class="admin-btn" id="adminBtn">
+                <span>Owner</span>
+                <div class="admin-icon">👤</div>
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="menu-area">
+                <div class="menu-header">MENU</div>
+                <div class="menu-grid">
+                    <div class="product-card" data-name="Monay" data-price="5.00" data-image="https://i.pinimg.com/originals/2e/a3/65/2ea365e4f24bbfbf5650751edbca7afa.jpg">
+                        <img src="https://i.pinimg.com/originals/2e/a3/65/2ea365e4f24bbfbf5650751edbca7afa.jpg" alt="Monay" class="product-image">
+                        <div class="product-name">Monay</div>
+                        <div class="product-price">5.00</div>
+                    </div>
+                    <div class="product-card" data-name="Hopia" data-price="5.00" data-image="https://almostnordic.com/wp-content/uploads/2021/12/ube-hopia-recipe.jpg">
+                        <img src="https://almostnordic.com/wp-content/uploads/2021/12/ube-hopia-recipe.jpg" alt="Hopia" class="product-image">
+                        <div class="product-name">Hopia</div>
+                        <div class="product-price">5.00</div>
+                    </div>
+                    <div class="product-card" data-name="Ensaymada" data-price="5.00" data-image="https://pluspng.com/img-png/ensaymada-png-ensaymada-500.jpg">
+                        <img src="https://pluspng.com/img-png/ensaymada-png-ensaymada-500.jpg" alt="Ensaymada" class="product-image">
+                        <div class="product-name">Ensaymada</div>
+                        <div class="product-price">5.00</div>
+                    </div>
+                    <div class="product-card" data-name="Pan de Coco" data-price="5.00" data-image="https://www.foxyfolksy.com/wp-content/uploads/2021/03/pan-de-coco-1200t.jpg">
+                        <img src="https://www.foxyfolksy.com/wp-content/uploads/2021/03/pan-de-coco-1200t.jpg" alt="Pan de Coco" class="product-image">
+                        <div class="product-name">Pan de Coco</div>
+                        <div class="product-price">5.00</div>
+                    </div>
+                    <div class="product-card" data-name="Torta" data-price="12.00" data-image="https://www.pingdesserts.com/wp-content/uploads/2013/06/Cebu-Torta-Cake-Recipe-1.jpg">
+                        <img src="https://www.pingdesserts.com/wp-content/uploads/2013/06/Cebu-Torta-Cake-Recipe-1.jpg" alt="Torta" class="product-image">
+                        <div class="product-name">Torta</div>
+                        <div class="product-price">12.00</div>
+                    </div>
+                    <div class="product-card" data-name="Spanish Bread" data-price="5.00" data-image="https://1.bp.blogspot.com/-_tLK1fKcsV4/YBLBujMN6vI/AAAAAAAAGWM/f48FRKGP1iM-fJj4Cyehm1h4sy4VMnxzgCLcBGAsYHQ/s1818/Spanish%2BBread%2BLNN.jpg">
+                        <img src="https://1.bp.blogspot.com/-_tLK1fKcsV4/YBLBujMN6vI/AAAAAAAAGWM/f48FRKGP1iM-fJj4Cyehm1h4sy4VMnxzgCLcBGAsYHQ/s1818/Spanish%2BBread%2BLNN.jpg" alt="Spanish Bread" class="product-image">
+                        <div class="product-name">Spanish Bread</div>
+                        <div class="product-price">5.00</div>
+                    </div>
+                    <div class="product-card" data-name="Slice Bread" data-price="45.00" data-image="https://mediaindia.eu/wp-content/uploads/2016/05/bread.jpg">
+                        <img src="https://mediaindia.eu/wp-content/uploads/2016/05/bread.jpg" alt="Slice Bread" class="product-image">
+                        <div class="product-name">Slice Bread</div>
+                        <div class="product-price">45.00</div>
+                    </div>
+                    <div class="product-card add-stock">
+                        <div class="add-icon">➕</div>
+                        <div>Add Stock</div>
+                    </div>
+                </div>
+            </div>
+            <div class="order-area">
+                <div class="order-header">
+                    <div class="order-label">OPERATOR:</div>
+                    <div class="order-value" id="operatorName">OWNER</div>
+                </div>
+                <div class="order-header">
+                    <div class="order-label">CUSTOMER:</div>
+                    <div class="order-value" id="customerIdDisplay">Customer #1</div>
+                </div>
+                <div class="order-items" id="orderItems">
+                    <div id="no-items-message">No items in your order yet</div>
+                </div>
+                <div class="order-summary">
+                    <div class="amount-row">
+                        <span class="label">Payable Amount:</span>
+                        <span id="payableAmount">₱0.00</span>
+                    </div>
+                    <div class="amount-row">
+                        <span class="label">Payment:</span>
+                        <input type="number" id="paymentInput" placeholder="Enter payment amount">
+                    </div>
+                    <div class="amount-row">
+                        <span class="label">Change:</span>
+                        <span id="changeAmount">₱0.00</span>
+                    </div>
+                    <button id="placeOrderBtn">Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="inventoryContent" class="main-content" style="display: none;">
+        <div class="header">
+            <div class="brand">Ederlyn's Bakery Inventory</div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search products...">
+            </div>
+            <div class="admin-btn" id="adminBtn">
+                <span>Owner</span>
+                <div class="admin-icon">👤</div>
+            </div>
+        </div>
+        <div class="inventory-container">
+            <h2 class="inventory-header">Product Management</h2>
+            <div class="inventory-actions">
+                <button id="addItemBtn" class="inventory-button">Add New Product</button>
+            </div>
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTableBody">
+                </tbody>
+            </table>
+        </div>
+        <div id="addItemModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Add New Product</h3>
+        <form id="addItemForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="itemName">Product Name:</label>
+                <input type="text" id="itemName" required>
+            </div>
+            <div class="form-group">
+                <label for="itemStock">Stock:</label>
+                <input type="text" id="itemStock" required placeholder="e.g., 20pcs">
+            </div>
+            <div class="form-group">
+                <label for="itemPrice">Price:</label>
+                <input type="number" id="itemPrice" step="0.01" min="0" required placeholder="e.g., 50.00">
+            </div>
+            <div class="form-group">
+                <label for="itemImage">Upload Image:</label>
+                <input type="file" id="itemImage" accept="image/*" required>
+            </div>
+            <button type="submit" class="submit-btn">Add Product</button>
+        </form>
+    </div>
+</div>
+        <div id="updateItemModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Update Product</h3>
+                <form id="updateItemForm">
+                    <input type="hidden" id="updateItemIndex">
+                    <div class="form-group">
+                        <label for="updateItemName">Product Name:</label>
+                        <input type="text" id="updateItemName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateItemStock">Stock:</label>
+                        <input type="text" id="updateItemStock" required placeholder="e.g., 20pcs">
+                    </div>
+                    <button type="submit" class="submit-btn">Update Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="alertBox" class="alert-box"></div>
+                  
+<script>
+let orderItems = {};
+let total = 0;
+let salesData = [];
+let totalSales = 0;
+let totalAmount = 0;
+let currentCustomerId = 1; 
+let isLoggedIn = false;
+let customerCounter = 1; 
+let inventoryItems = [
+    { name: "Hopia", stock: "20pcs", status: "In Stock" },
+    { name: "Monay", stock: "15pcs", status: "In Stock" },
+    { name: "Ensaymada", stock: "8pcs", status: "Low Stock" },
+    { name: "Pan de Coco", stock: "0pcs", status: "Out of Stock" }
+];
+
+function updateOrderDisplay() {
+    const orderItemsContainer = document.getElementById('orderItems');
+    const payableAmount = document.getElementById('payableAmount');
+    orderItemsContainer.innerHTML = '';
+    if (Object.keys(orderItems).length === 0) {
+        orderItemsContainer.innerHTML = '<div id="no-items-message">No items in your order yet</div>';
+        payableAmount.textContent = '₱0.00';
+        return;
+    }
+    total = 0;
+    for (const [itemName, item] of Object.entries(orderItems)) {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        const itemElement = document.createElement('div');
+        itemElement.className = 'order-item';
+        itemElement.innerHTML = `
+            <img src="${item.image}" alt="${itemName}" class="order-item-image">
+            <div class="order-item-details">
+                <div class="order-item-name">${itemName}</div>
+                <div class="order-item-price">₱${item.price.toFixed(2)}</div>
+            </div>
+            <div class="order-item-quantity">
+                <div class="quantity-btn" data-name="${itemName}" data-action="decrease">-</div>
+                <div class="quantity-value">${item.quantity}</div>
+                <div class="quantity-btn" data-name="${itemName}" data-action="increase">+</div>
+            </div>
+            <button class="remove-btn" data-name="${itemName}">Remove</button>
+        `;
+        orderItemsContainer.appendChild(itemElement);
+    }
+    payableAmount.textContent = `₱${total.toFixed(2)}`;
+    document.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', handleQuantityChange);
+    });
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', handleRemoveItem);
+    });
+}
+
+function handleQuantityChange(event) {
+    const itemName = event.target.dataset.name;
+    const action = event.target.dataset.action;
+    if (action === 'increase') {
+        orderItems[itemName].quantity++;
+    } else if (action === 'decrease' && orderItems[itemName].quantity > 1) {
+        orderItems[itemName].quantity--;
+    }
+    updateOrderDisplay();
+}
+
+function handleRemoveItem(event) {
+    const itemName = event.target.dataset.name;
+    delete orderItems[itemName];
+    updateOrderDisplay();
+}
+
+function updateInventoryOnSale() {
+    Object.keys(orderItems).forEach(itemName => {
+        const quantitySold = orderItems[itemName].quantity;
+        const inventoryItem = inventoryItems.find(item => 
+            item.name.toLowerCase() === itemName.toLowerCase()
+        );
+        if (inventoryItem) {
+            const stockMatch = inventoryItem.stock.match(/\d+/);
+            if (stockMatch) {
+                const currentStock = parseInt(stockMatch[0]);
+                const newStock = Math.max(0, currentStock - quantitySold);
+                const unit = inventoryItem.stock.replace(stockMatch[0], '');
+                inventoryItem.stock = `${newStock}${unit}`;
+                inventoryItem.status = determineStatus(inventoryItem.stock);
+            }
+        }
+    });
+    saveInventoryData();
+    updateInventoryTable();
+    checkStockAlerts();
+}
+
+function checkStockAlerts() {
+    const lowStockProducts = inventoryItems.filter(item => 
+        item.status === "Low Stock" || item.status === "Out of Stock"
+    );
+    if (lowStockProducts.length > 0) {
+        let alertMessage = "";
+        let alertClass = "";
+        if (lowStockProducts.some(item => item.status === "Out of Stock")) {
+            alertMessage = "Some products are out of stock!";
+            alertClass = "alert-danger";
+        } else {
+            alertMessage = "Some products are low in stock!";
+            alertClass = "alert-warning";
+        }
+        showAlert(alertMessage, alertClass);
+    }
+    updateDashboardStats();
+}
+
+function showAlert(message, alertClass) {
+    const alertBox = document.getElementById('alertBox');
+    alertBox.textContent = message;
+    alertBox.className = `alert-box ${alertClass}`;
+    alertBox.style.display = 'block';
+    setTimeout(() => {
+        alertBox.style.display = 'none';
+    }, 5000);
+}
+
+function determineStatus(stock) {
+    if (!stock) return "Out of Stock";
+    const numericValue = parseFloat(stock);
+    if (isNaN(numericValue)) return "Out of Stock";
+    if (numericValue <= 0) return "Out of Stock";
+    if (numericValue < 10) return "Low Stock";
+    return "In Stock";
+}
+
+function saveOrderToSales() {
+    if (Object.keys(orderItems).length === 0) return false;
+    const now = new Date();
+    const date = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`;
+    const time = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+    const customerId = currentCustomerId;
+    document.getElementById('customerIdDisplay').textContent = `Customer #${customerId}`;
+    const sale = {
+        date: `${date} ${time}`,
+        customer: customerId,
+        amount: total,
+        salesBy: document.getElementById('operatorName').textContent
+    };
+    salesData.unshift(sale);
+    totalSales++;
+    totalAmount += total;
+    customerCounter++;
+    currentCustomerId = customerCounter;
+    localStorage.setItem('salesData', JSON.stringify(salesData));
+    localStorage.setItem('totalSales', totalSales);
+    localStorage.setItem('totalAmount', totalAmount);
+    localStorage.setItem('customerCounter', customerCounter);
+    updateSalesReport();
+    return true;
+}
+
+function updateSalesReport() {
+    const salesTableBody = document.getElementById('salesTableBody');
+    salesTableBody.innerHTML = '';
+    if (salesData.length === 0) {
+        salesTableBody.innerHTML = '<tr><td colspan="4">No sales data available</td></tr>';
+        return;
+    }
+    const recentSales = salesData.slice(0, 10);
+    recentSales.forEach(sale => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${sale.date}</td>
+            <td>Customer #${sale.customer}</td>
+            <td>₱${sale.amount.toFixed(2)}</td>
+            <td>${sale.salesBy}</td>
+        `;
+        salesTableBody.appendChild(row);
+    });
+}
+
+function loadSalesData() {
+    const savedSalesData = localStorage.getItem('salesData');
+    const savedTotalSales = localStorage.getItem('totalSales');
+    const savedTotalAmount = localStorage.getItem('totalAmount');
+    const savedCounter = localStorage.getItem('customerCounter');
+    if (savedSalesData) {
+        salesData = JSON.parse(savedSalesData);
+    }
+    if (savedTotalSales) {
+        totalSales = parseInt(savedTotalSales);
+    }
+    if (savedTotalAmount) {
+        totalAmount = parseFloat(savedTotalAmount);
+    }
+    if (savedCounter) {
+        customerCounter = parseInt(savedCounter);
+        currentCustomerId = customerCounter;
+    } else {
+        if (salesData.length > 0) {
+            customerCounter = Math.max(...salesData.map(sale => sale.customer)) + 1;
+            currentCustomerId = customerCounter;
+        } else {
+            customerCounter = 1;
+            currentCustomerId = 1;
+        }
+    }
+    document.getElementById('customerIdDisplay').textContent = `Customer #${currentCustomerId}`;
+    updateSalesReport();
+}
+
+function updateDashboardStats() {
+    let outOfStockCount = 0;
+    let lowStockCount = 0;
+    let totalProducts = 0;
+    inventoryItems.forEach(item => {
+        if (item.status === "Out of Stock") outOfStockCount++;
+        if (item.status === "Low Stock") lowStockCount++;
+        totalProducts++;
+    });
+    document.getElementById('totalSaleAmount').textContent = `₱${totalAmount.toFixed(2)}`;
+    document.getElementById('totalSaleCount').textContent = totalSales;
+    document.getElementById('totalProducts').textContent = totalProducts;
+    document.getElementById('lowStockCount').textContent = `Low Stock: ${lowStockCount}`;
+    const lowStockElement = document.getElementById('lowStockCount');
+    if (lowStockCount > 0) {
+        lowStockElement.style.color = "#ff9800";
+        lowStockElement.style.fontWeight = "bold";
+    } else {
+        lowStockElement.style.color = "";
+        lowStockElement.style.fontWeight = "";
+    }
+}
+
+function loadInventoryData() {
+    const savedInventory = localStorage.getItem('inventoryItems');
+    if (savedInventory) {
+        inventoryItems = JSON.parse(savedInventory);
+    }
+    updateInventoryTable();
+}
+
+function saveInventoryData() {
+    localStorage.setItem('inventoryItems', JSON.stringify(inventoryItems));
+}
+
+function updateInventoryTable() {
+    const tableBody = document.getElementById('inventoryTableBody');
+    tableBody.innerHTML = '';
+    inventoryItems.forEach((item, index) => {
+        const row = document.createElement('tr');
+        let statusClass = 'in-stock';
+        if (item.status === 'Low Stock') {
+            statusClass = 'low-stock';
+        } else if (item.status === 'Out of Stock') {
+            statusClass = 'out-of-stock';
+        }
+        row.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.stock}</td>
+            <td><span class="status ${statusClass}">${item.status}</span></td>
+            <td>
+                <button class="update-btn" data-index="${index}">Update</button>
+                <button class="delete-btn" data-index="${index}">Delete</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+    document.querySelectorAll('.update-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            openUpdateModal(parseInt(this.dataset.index));
+        });
+    });
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            deleteInventoryItem(parseInt(this.dataset.index));
+        });
+    });
+}
+
+function openAddModal() {
+    const modal = document.getElementById('addItemModal');
+    modal.style.display = 'block';
+    document.getElementById('addItemForm').reset();
+}
+
+function openUpdateModal(index) {
+    const modal = document.getElementById('updateItemModal');
+    const item = inventoryItems[index];
+    document.getElementById('updateItemIndex').value = index;
+    document.getElementById('updateItemName').value = item.name;
+    document.getElementById('updateItemStock').value = item.stock;
+    modal.style.display = 'block';
+}
+
+function closeModals() {
+    document.getElementById('addItemModal').style.display = 'none';
+    document.getElementById('updateItemModal').style.display = 'none';
+}
+
+function addInventoryItem(event) {
+    event.preventDefault();
+    const name = document.getElementById('itemName').value;
+    const stock = document.getElementById('itemStock').value;
+    const price = parseFloat(document.getElementById('itemPrice').value).toFixed(2); // Get price and format to 2 decimal places
+    const imageInput = document.getElementById('itemImage');
+    const status = determineStatus(stock);
+    
+    // Get image file and create object URL
+    const imageFile = imageInput.files[0];
+    let imageUrl = "https://via.placeholder.com/150"; // Default image
+    if (imageFile) {
+        imageUrl = URL.createObjectURL(imageFile);
+    }
+
+    // Add item to inventory
+    inventoryItems.push({
+        name: name,
+        stock: stock,
+        status: status
+    });
+    
+    saveInventoryData();
+    updateInventoryTable();
+    closeModals();
+    checkStockAlerts();
+    
+    // Add item to menu display
+    const menuGrid = document.querySelector('.menu-grid');
+    const newProductCard = document.createElement('div');
+    newProductCard.className = 'product-card';
+    newProductCard.dataset.name = name;
+    newProductCard.dataset.price = price; // Set the price here
+    newProductCard.dataset.image = imageUrl;
+
+    newProductCard.innerHTML = `
+        <img src="${imageUrl}" alt="${name}" class="product-image">
+        <div class="product-name">${name}</div>
+        <div class="product-price">₱${price}</div> <!-- Display price with currency symbol -->
+    `;
+    
+    newProductCard.addEventListener('click', function() {
+        const name = this.dataset.name;
+        const price = parseFloat(this.dataset.price);
+        const image = this.dataset.image;
+        if (orderItems[name]) {
+            orderItems[name].quantity++;
+        } else {
+            orderItems[name] = {
+                price: price,
+                quantity: 1,
+                image: image
+            };
+        }
+        updateOrderDisplay();
+    });
+
+    menuGrid.insertBefore(newProductCard, menuGrid.lastElementChild); // Insert before the "Add Stock" card
+}
+function updateInventoryItem(event) {
+    event.preventDefault();
+    const index = document.getElementById('updateItemIndex').value;
+    const name = document.getElementById('updateItemName').value;
+    const stock = document.getElementById('updateItemStock').value;
+    const status = determineStatus(stock);
+    inventoryItems[index] = {
+        name: name,
+        stock: stock,
+        status: status
+    };
+    saveInventoryData();
+    updateInventoryTable();
+    closeModals();
+    checkStockAlerts();
+}
+
+function deleteInventoryItem(index) {
+    if (confirm('Are you sure you want to delete this product?')) {
+        inventoryItems.splice(index, 1);
+        saveInventoryData();
+        updateInventoryTable();
+        checkStockAlerts();
+    }
+}
+
+function showLoginPage() {
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('appContent').style.display = 'none';
+    isLoggedIn = false;
+}
+
+function showDashboard() {
+    if (!isLoggedIn) {
+        showLoginPage();
+        return;
+    }
+    document.getElementById('dashboardContent').style.display = 'block';
+    document.getElementById('orderContent').style.display = 'none';
+    document.getElementById('inventoryContent').style.display = 'none';
+    document.getElementById('dashboardNav').classList.add('active');
+    document.getElementById('orderNav').classList.remove('active');
+    document.getElementById('inventoryNav').classList.remove('active');
+    document.getElementById('logoutNav').classList.remove('active');
+    updateSalesReport();
+    updateDashboardStats();
+}
+
+function showOrder() {
+    if (!isLoggedIn) {
+        showLoginPage();
+        return;
+    }
+    document.getElementById('dashboardContent').style.display = 'none';
+    document.getElementById('orderContent').style.display = 'flex';
+    document.getElementById('inventoryContent').style.display = 'none';
+    document.getElementById('dashboardNav').classList.remove('active');
+    document.getElementById('orderNav').classList.add('active');
+    document.getElementById('inventoryNav').classList.remove('active');
+}
+
+function showInventory() {
+    if (!isLoggedIn) {
+        showLoginPage();
+        return;
+    }
+    document.getElementById('dashboardContent').style.display = 'none';
+    document.getElementById('orderContent').style.display = 'none';
+    document.getElementById('inventoryContent').style.display = 'block';
+    document.getElementById('dashboardNav').classList.remove('active');
+    document.getElementById('orderNav').classList.remove('active');
+    document.getElementById('inventoryNav').classList.add('active');
+    updateInventoryTable();
+}
+
+function showMainApp() {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('appContent').style.display = 'flex';
+    isLoggedIn = true;
+    showDashboard();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadSalesData();
+    loadInventoryData();
+    checkStockAlerts();
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+            const messageBox = document.getElementById('messageBox');
+            if (username === "admin" && password === "admin123") {
+                messageBox.style.backgroundColor = "#d4edda";
+                messageBox.style.color = "#155724";
+                messageBox.textContent = "Login successful!";
+                document.getElementById('operatorName').textContent = "OWNER";
+                setTimeout(() => showMainApp(), 1000);
+            } else {
+                messageBox.style.backgroundColor = "#f8d7da";
+                messageBox.style.color = "#721c24";
+                messageBox.textContent = "Invalid username or password!";
+            }
+        });
+    }
+    const dashboardNav = document.getElementById('dashboardNav');
+    if (dashboardNav) dashboardNav.addEventListener('click', showDashboard);
+    const orderNav = document.getElementById('orderNav');
+    if (orderNav) orderNav.addEventListener('click', showOrder);
+    const inventoryNav = document.getElementById('inventoryNav');
+    if (inventoryNav) inventoryNav.addEventListener('click', showInventory);
+    const logoutNav = document.getElementById('logoutNav');
+    if (logoutNav) {
+        logoutNav.addEventListener('click', function() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('messageBox').textContent = '';
+            orderItems = {};
+            updateOrderDisplay();
+            showLoginPage();
+        });
+    }
+    document.querySelectorAll('.product-card:not(.add-stock)').forEach(card => {
+        card.addEventListener('click', function() {
+            const name = this.dataset.name;
+            const price = parseFloat(this.dataset.price);
+            const image = this.dataset.image;
+            if (orderItems[name]) {
+                orderItems[name].quantity++;
+            } else {
+                orderItems[name] = {
+                    price: price,
+                    quantity: 1,
+                    image: image
+                };
+            }
+            updateOrderDisplay();
+        });
+    });
+    const addStockBtn = document.querySelector('.product-card.add-stock');
+    if (addStockBtn) {
+        addStockBtn.addEventListener('click', function() {
+            showInventory();
+        });
+    }
+    const placeOrderBtn = document.getElementById('placeOrderBtn');
+    if (placeOrderBtn) {
+        placeOrderBtn.addEventListener('click', function() {
+            if (Object.keys(orderItems).length === 0) {
+                alert('No items to place order!');
+                return;
+            }
+            const payableAmount = parseFloat(document.getElementById('payableAmount').textContent.replace('₱', ''));
+            const paymentInput = document.getElementById('paymentInput');
+            const paymentValue = paymentInput.value ? parseFloat(paymentInput.value) : 0;
+            if (paymentValue < payableAmount) {
+                alert('Insufficient payment amount!');
+                return;
+            }
+            if (confirm('Complete this order?')) {
+                try {
+                    updateInventoryOnSale();
+                    const success = saveOrderToSales();
+                    if (success) {
+                        const change = paymentValue - payableAmount;
+                        alert(`Order placed successfully!
+Total: ₱${payableAmount.toFixed(2)}
+Received: ₱${paymentValue.toFixed(2)}
+Change: ₱${change.toFixed(2)}`);
+                        orderItems = {};
+                        paymentInput.value = '';
+                        document.getElementById('changeAmount').textContent = '₱0.00';
+                        updateOrderDisplay();
+                    }
+                } catch (error) {
+                    alert('Error placing order: ' + error.message);
+                }
+            }
+        });
+    }
+    const searchInputs = document.querySelectorAll('.search-input');
+    searchInputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            if (this.closest('#inventoryContent')) {
+                document.querySelectorAll('#inventoryTableBody tr').forEach(row => {
+                    const productName = row.cells[0].textContent.toLowerCase();
+                    if (productName.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            } else {
+                document.querySelectorAll('.product-card:not(.add-stock)').forEach(card => {
+                    const productName = card.dataset.name.toLowerCase();
+                    card.style.display = productName.includes(searchTerm) ? 'block' : 'none';
+                });
+            }
+        });
+    });
+    const paymentInput = document.getElementById('paymentInput');
+    if (paymentInput) {
+        paymentInput.addEventListener('input', function() {
+            const payableAmount = parseFloat(document.getElementById('payableAmount').textContent.replace('₱', '')) || 0;
+            const paymentValue = parseFloat(this.value) || 0;
+            const changeAmount = document.getElementById('changeAmount');
+            const change = paymentValue - payableAmount;
+            if (change >= 0) {
+                changeAmount.textContent = `₱${change.toFixed(2)}`;
+                changeAmount.style.color = '#4a90e2';
+            } else {
+                changeAmount.textContent = `₱${Math.abs(change).toFixed(2)} short`;
+                changeAmount.style.color = '#ff6b6b';
+            }
+        });
+    }
+    const addItemBtn = document.getElementById('addItemBtn');
+    if (addItemBtn) {
+        addItemBtn.addEventListener('click', openAddModal);
+    }
+    const addItemForm = document.getElementById('addItemForm');
+    if (addItemForm) {
+        addItemForm.addEventListener('submit', addInventoryItem);
+    }
+    const updateItemForm = document.getElementById('updateItemForm');
+    if (updateItemForm) {
+        updateItemForm.addEventListener('submit', updateInventoryItem);
+    }
+    document.querySelectorAll('.close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', closeModals);
+    });
+    window.addEventListener('click', function(event) {
+        const addItemModal = document.getElementById('addItemModal');
+        const updateItemModal = document.getElementById('updateItemModal');
+        if ((addItemModal && event.target === addItemModal) || 
+            (updateItemModal && event.target === updateItemModal)) {
+            closeModals();
+        }
+    });
+    showLoginPage();
+});
+</script>
+</body>
+</html>
